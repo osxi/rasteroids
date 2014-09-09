@@ -1,4 +1,3 @@
-
 -- initialization stuff
 function love.load()
    background = love.graphics.newImage("assets/background.png")
