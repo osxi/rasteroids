@@ -1,4 +1,4 @@
--- initialization stuff
+-- Initialization stuff
 function love.load()
   -- Specify background image
   background = love.graphics.newImage('assets/background.png')
@@ -10,7 +10,7 @@ function love.load()
   score = 0
 
   -- Set initial player character origin (center of screen)
-  origin = { love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 }
+  origin = { x = love.graphics.getWidth() / 2, y = love.graphics.getHeight() / 2 }
 
   -- Set initial player character heading (rotational orientation)
   heading = 0
@@ -25,11 +25,11 @@ function love.load()
   movement_max = 8
 
   -- Initial player character polygon
-  pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
-               origin[1] - 25, origin[2] + 25 }
+  pc_vertices = { origin.x + 25, origin.y + 25, origin.x, origin.x - 25,
+               origin.x - 25, origin.y + 25 }
 end
 
--- update
+-- Update
 function love.update(dt)
   -- User input
   if love.keyboard.isDown('w') then     -- Forward
@@ -54,37 +54,37 @@ function love.update(dt)
   -- Decelerate naturally
   if movement_speed > 0 then
     -- Inertial movement
-    origin[1] = origin[1] + math.sin(heading) * movement_speed
-    origin[2] = origin[2] - math.cos(heading) * movement_speed
+    origin.x = origin.x + math.sin(heading) * movement_speed
+    origin.y = origin.y - math.cos(heading) * movement_speed
 
     -- Decelerate over dt
     movement_speed = movement_speed - 0.1
   end
 
   -- Edge of screen wrapping
-  if origin[2] < -25 then                              -- Top of window
-    origin[2] = love.graphics.getHeight()
-  elseif origin[2] > love.graphics.getHeight()+25 then -- Bottom of window
-    origin[2] = 0
+  if origin.y < -25 then                              -- Top of window
+    origin.y = love.graphics.getHeight()
+  elseif origin.y > love.graphics.getHeight()+25 then -- Bottom of window
+    origin.y = 0
   end
-  if origin[1] < -25 then                              -- Left side of window
-    origin[1] = love.graphics.getWidth()
-  elseif origin[1] > love.graphics.getWidth()+25 then -- Right side of window
-    origin[1] = 0
+  if origin.x < -25 then                              -- Left side of window
+    origin.x = love.graphics.getWidth()
+  elseif origin.x > love.graphics.getWidth()+25 then  -- Right side of window
+    origin.x = 0
   end
 
-  -- Update player character polygon
+  -- Updated player character polygon
   pc_vertices = {
-                  math.cos(heading) * (origin[1]+25 - origin[1]) - math.sin(heading) * (origin[2]+25 - origin[2]) + origin[1],
-                  math.sin(heading) * (origin[1]+25 - origin[1]) + math.cos(heading) * (origin[2]+25 - origin[2]) + origin[2],
-                  math.cos(heading) * (origin[1] - origin[1]) - math.sin(heading) * (origin[2]-25 - origin[2]) + origin[1],
-                  math.sin(heading) * (origin[1] - origin[1]) + math.cos(heading) * (origin[2]-25 - origin[2]) + origin[2],
-                  math.cos(heading) * (origin[1]-25 - origin[1]) - math.sin(heading) * (origin[2]+25 - origin[2]) + origin[1],
-                  math.sin(heading) * (origin[1]-25 - origin[1]) + math.cos(heading) * (origin[2]+25 - origin[2]) + origin[2],
+                  math.cos(heading) * (origin.x+25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
+                  math.sin(heading) * (origin.x+25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
+                  math.cos(heading) * (origin.x - origin.x) - math.sin(heading) * (origin.y-25 - origin.y) + origin.x,
+                  math.sin(heading) * (origin.x - origin.x) + math.cos(heading) * (origin.y-25 - origin.y) + origin.y,
+                  math.cos(heading) * (origin.x-25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
+                  math.sin(heading) * (origin.x-25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
                 }
 end
 
--- main
+-- Main
 function love.draw()
   for i = 0, love.graphics.getWidth() / background:getWidth() do
     for j = 0, love.graphics.getHeight() / background:getHeight() do
