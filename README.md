@@ -9,5 +9,4 @@ Keyboard Shortcuts
 | ------------- | ------------------------------- |
 | `w`           | Forward                         |
 | `a`           | Rotate counter-clockwise (left) |
-| `s`           | Backward                        |
 | `d`           | Rotate clockwise (right)        |
