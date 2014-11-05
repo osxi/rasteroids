@@ -18,6 +18,9 @@ function love.load()
   -- Set initial player character heading sensitivity
   heading_sensitivity = 1.5
 
+  -- Set player character movement speed (forward/backward)
+  movement_speed = 3
+
   -- Initial player character polygon
   pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
                origin[1] - 25, origin[2] + 25 }
@@ -27,9 +30,8 @@ end
 function love.update(dt)
   -- User input
   if love.keyboard.isDown('w') then     -- Forward
-    origin[2] = origin[2] - 5
-  elseif love.keyboard.isDown('s') then -- Backward
-    origin[2] = origin[2] + 5
+    origin[1] = origin[1] + math.sin(heading) * movement_speed
+    origin[2] = origin[2] - math.cos(heading) * movement_speed
   end
   if love.keyboard.isDown('a') then     -- Rotate clockwise (left)
     if heading == 0 then
@@ -58,8 +60,6 @@ function love.update(dt)
   end
 
   -- Update player character polygon
-  -- pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
-  --                 origin[1] - 25, origin[2] + 25 }
   pc_vertices = {
                   math.cos(heading) * (origin[1]+25 - origin[1]) - math.sin(heading) * (origin[2]+25 - origin[2]) + origin[1],
                   math.sin(heading) * (origin[1]+25 - origin[1]) + math.cos(heading) * (origin[2]+25 - origin[2]) + origin[2],
