@@ -18,8 +18,11 @@ function love.load()
   -- Set initial player character heading sensitivity
   heading_sensitivity = 1.5
 
-  -- Set player character movement speed (forward/backward)
-  movement_speed = 3
+  -- Set initial player character movement speed (forward/backward)
+  movement_speed = 0
+
+  -- Max movement_speed
+  movement_max = 8
 
   -- Initial player character polygon
   pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
@@ -30,8 +33,9 @@ end
 function love.update(dt)
   -- User input
   if love.keyboard.isDown('w') then     -- Forward
-    origin[1] = origin[1] + math.sin(heading) * movement_speed
-    origin[2] = origin[2] - math.cos(heading) * movement_speed
+    if movement_speed < movement_max then
+      movement_speed = movement_speed + 0.25
+    end
   end
   if love.keyboard.isDown('a') then     -- Rotate clockwise (left)
     if heading == 0 then
@@ -45,6 +49,16 @@ function love.update(dt)
     else
       heading = 0
     end
+  end
+
+  -- Decelerate naturally
+  if movement_speed > 0 then
+    -- Inertial movement
+    origin[1] = origin[1] + math.sin(heading) * movement_speed
+    origin[2] = origin[2] - math.cos(heading) * movement_speed
+
+    -- Decelerate over dt
+    movement_speed = movement_speed - 0.1
   end
 
   -- Edge of screen wrapping
