@@ -4,7 +4,7 @@ function love.load()
   background = love.graphics.newImage('assets/background.png')
 
   -- Set font
-  love.graphics.setNewFont('assets/Inconsolata for Powerline.otf', 28)
+  love.graphics.setNewFont(28)
 
   -- Initialize score
   score = 0
