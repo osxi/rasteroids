@@ -12,6 +12,12 @@ function love.load()
   -- Set initial player character origin (center of screen)
   origin = { love.graphics.getWidth() / 2, love.graphics.getHeight() / 2 }
 
+  -- Set initial player character heading (rotational orientation)
+  heading = 0
+
+  -- Set initial player character heading sensitivity
+  heading_sensitivity = 1.5
+
   -- Initial player character polygon
   pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
                origin[1] - 25, origin[2] + 25 }
@@ -25,10 +31,18 @@ function love.update(dt)
   elseif love.keyboard.isDown('s') then -- Backward
     origin[2] = origin[2] + 5
   end
-  if love.keyboard.isDown('a') then     -- Strafe left
-    origin[1] = origin[1] - 5
-  elseif love.keyboard.isDown('d') then -- Strafe right
-    origin[1] = origin[1] + 5
+  if love.keyboard.isDown('a') then     -- Rotate clockwise (left)
+    if heading == 0 then
+      heading = 360
+    else
+      heading = heading - math.pi * dt * heading_sensitivity
+    end
+  elseif love.keyboard.isDown('d') then -- Rotate counter-clockwise (right)
+    if heading < 360 then
+      heading = heading + math.pi * dt * heading_sensitivity
+    else
+      heading = 0
+    end
   end
 
   -- Edge of screen wrapping
@@ -44,8 +58,16 @@ function love.update(dt)
   end
 
   -- Update player character polygon
-  pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
-                  origin[1] - 25, origin[2] + 25 }
+  -- pc_vertices = { origin[1] + 25, origin[2] + 25, origin[1], origin[2] - 25,
+  --                 origin[1] - 25, origin[2] + 25 }
+  pc_vertices = {
+                  math.cos(heading) * (origin[1]+25 - origin[1]) - math.sin(heading) * (origin[2]+25 - origin[2]) + origin[1],
+                  math.sin(heading) * (origin[1]+25 - origin[1]) + math.cos(heading) * (origin[2]+25 - origin[2]) + origin[2],
+                  math.cos(heading) * (origin[1] - origin[1]) - math.sin(heading) * (origin[2]-25 - origin[2]) + origin[1],
+                  math.sin(heading) * (origin[1] - origin[1]) + math.cos(heading) * (origin[2]-25 - origin[2]) + origin[2],
+                  math.cos(heading) * (origin[1]-25 - origin[1]) - math.sin(heading) * (origin[2]+25 - origin[2]) + origin[1],
+                  math.sin(heading) * (origin[1]-25 - origin[1]) + math.cos(heading) * (origin[2]+25 - origin[2]) + origin[2],
+                }
 end
 
 -- main
