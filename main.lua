@@ -38,13 +38,13 @@ function love.update(dt)
     end
   end
   if love.keyboard.isDown('a') then     -- Rotate clockwise (left)
-    if heading == 0 then
-      heading = 360
+    if heading <= 0 then
+      heading = 2 * math.pi
     else
       heading = heading - math.pi * dt * heading_sensitivity
     end
   elseif love.keyboard.isDown('d') then -- Rotate counter-clockwise (right)
-    if heading < 360 then
+    if heading <= 2 * math.pi then
       heading = heading + math.pi * dt * heading_sensitivity
     else
       heading = 0
@@ -95,6 +95,9 @@ function love.draw()
 
   -- Draw score
   love.graphics.print('Score: ' .. score, 5, 0)
+
+  -- Display heading
+  love.graphics.print('Heading: ' .. heading, 5, 30)
 
   -- Draw player character
   love.graphics.polygon('line', pc_vertices)
