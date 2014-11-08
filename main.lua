@@ -15,6 +15,9 @@ function love.load()
   -- Set initial player character heading (rotational orientation)
   heading = 0
 
+  -- Set initial player inertial heading (simulate resistance to heading change)
+  inertial_heading = 0
+
   -- Set initial player character heading sensitivity
   heading_sensitivity = 1.5
 
@@ -51,11 +54,20 @@ function love.update(dt)
     end
   end
 
+  -- Update inertial heading
+  if inertial_heading ~= heading then
+    if inertial_heading > heading then
+      inertial_heading = inertial_heading - .05
+    else
+      inertial_heading = inertial_heading + .05
+    end
+  end
+
   -- Decelerate naturally
   if movement_speed > 0 then
     -- Inertial movement
-    origin.x = origin.x + math.sin(heading) * movement_speed
-    origin.y = origin.y - math.cos(heading) * movement_speed
+    origin.x = origin.x + math.sin(inertial_heading) * movement_speed
+    origin.y = origin.y - math.cos(inertial_heading) * movement_speed
 
     -- Decelerate over dt
     movement_speed = movement_speed - 0.1
@@ -98,6 +110,9 @@ function love.draw()
 
   -- Display heading
   love.graphics.print('Heading: ' .. heading, 5, 30)
+
+  -- Display inertial heading
+  love.graphics.print('Inertial Heading: ' .. inertial_heading, 5, 60)
 
   -- Draw player character
   love.graphics.polygon('line', pc_vertices)
