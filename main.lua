@@ -120,10 +120,10 @@ function love.draw()
   love.graphics.print('Score: ' .. score, 5, 0)
 
   -- Display heading
-  love.graphics.print('Heading: ' .. heading, 5, 30)
+  -- love.graphics.print('Heading: ' .. heading, 5, 30)
 
   -- Display inertial heading
-  love.graphics.print('Inertial Heading: ' .. inertial_heading, 5, 60)
+  -- love.graphics.print('Inertial Heading: ' .. inertial_heading, 5, 60)
 
   -- Draw player character
   love.graphics.polygon('line', pc_vertices)
