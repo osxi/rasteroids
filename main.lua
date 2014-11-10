@@ -1,3 +1,14 @@
+-- Signum
+function sgn(x)
+  if x > 0 then
+    return 1
+  elseif x < 0 then
+    return -1
+  else
+    return 0
+  end
+end
+
 -- Initialization stuff
 function love.load()
   -- Specify background image
@@ -55,16 +66,12 @@ function love.update(dt)
   end
 
   -- Update inertial heading
-  if inertial_heading ~= heading then
-    max = math.max(heading, inertial_heading)
-    min = math.min(heading, inertial_heading)
-    diff = max - min
-
-    if inertial_heading < heading then
-      inertial_heading = inertial_heading + .05 * diff
-    else
-      inertial_heading = inertial_heading - .05 * diff
-    end
+  dh = math.atan2(math.sin(heading-inertial_heading), math.cos(heading-inertial_heading))
+  inertial_heading = inertial_heading + (dh * .05)
+  if inertial_heading <= 0 then               -- Convert 0 to 2 * pi
+    inertial_heading = math.pi * 2
+  elseif inertial_heading >= math.pi * 2 then -- Convert 2 * pi to 0
+    inertial_heading = 0
   end
 
   -- Decelerate naturally
