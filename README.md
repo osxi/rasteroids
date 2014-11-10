@@ -10,3 +10,4 @@ Keyboard Shortcuts
 | `w`           | Forward                         |
 | `a`           | Rotate counter-clockwise (left) |
 | `d`           | Rotate clockwise (right)        |
+| `space`       | Pew pew pew! (fire projectile)  |
