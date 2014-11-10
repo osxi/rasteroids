@@ -40,7 +40,12 @@ function love.load()
 
   -- Initial player character polygon
   pc_vertices = { origin.x + 25, origin.y + 25, origin.x, origin.x - 25,
-               origin.x - 25, origin.y + 25 }
+                  origin.x - 25, origin.y + 25 }
+
+  -- Initial player character polygon shape (physics)
+  pc_shape = love.physics.newPolygonShape(pc_vertices[1], pc_vertices[2],
+                                          pc_vertices[3], pc_vertices[4],
+                                          pc_vertices[5], pc_vertices[6])
 end
 
 -- Update
@@ -63,6 +68,17 @@ function love.update(dt)
     else
       heading = 0
     end
+  end
+  if love.keyboard.isDown(' ') then     -- Pew pew pew
+    pew = { x = origin.x, y = origin.y, heading = heading - math.pi * 1/2}
+  else
+    -- pew = false
+  end
+
+  -- Player character projectile movement
+  if pew then
+    pew.x = pew.x + 5 * math.cos(pew.heading)
+    pew.y = pew.y + 5 * math.sin(pew.heading)
   end
 
   -- Update inertial heading
@@ -104,7 +120,25 @@ function love.update(dt)
                   math.sin(heading) * (origin.x - origin.x) + math.cos(heading) * (origin.y-25 - origin.y) + origin.y,
                   math.cos(heading) * (origin.x-25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
                   math.sin(heading) * (origin.x-25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
-                }
+  }
+
+  -- Updated player character polygon shape (physics)
+  pc_shape = love.physics.newPolygonShape(pc_vertices[1], pc_vertices[2],
+                                          pc_vertices[3], pc_vertices[4],
+                                          pc_vertices[5], pc_vertices[6])
+
+  if collision_timeout then
+    collision_timeout = collision_timeout - .5
+    if collision_timeout == 0 then
+      collision = false
+    end
+  end
+
+  -- Detect player character and player character projectile collision
+  if pew and pc_shape:testPoint(0, 0, 0, pew.x, pew.y) then
+    collision = true
+    collision_timeout = 5
+  end
 end
 
 -- Main
@@ -124,6 +158,16 @@ function love.draw()
 
   -- Display inertial heading
   -- love.graphics.print('Inertial Heading: ' .. inertial_heading, 5, 60)
+
+  -- Display PC/projectile collision message
+  if collision then
+    love.graphics.print('Collision', 515, 0)
+  end
+
+  -- Display pew pew pew
+  if pew then
+    love.graphics.rectangle('fill', pew.x, pew.y, 4, 4)
+  end
 
   -- Draw player character
   love.graphics.polygon('line', pc_vertices)
