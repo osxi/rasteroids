@@ -56,10 +56,14 @@ function love.update(dt)
 
   -- Update inertial heading
   if inertial_heading ~= heading then
-    if inertial_heading > heading then
-      inertial_heading = inertial_heading - .05
+    max = math.max(heading, inertial_heading)
+    min = math.min(heading, inertial_heading)
+    diff = max - min
+
+    if inertial_heading < heading then
+      inertial_heading = inertial_heading + .05 * diff
     else
-      inertial_heading = inertial_heading + .05
+      inertial_heading = inertial_heading - .05 * diff
     end
   end
 
