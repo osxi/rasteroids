@@ -127,6 +127,7 @@ function love.update(dt)
                                           pc_vertices[3], pc_vertices[4],
                                           pc_vertices[5], pc_vertices[6])
 
+  -- Decrement time since last collision, leading to reset
   if collision_timeout then
     collision_timeout = collision_timeout - .5
     if collision_timeout == 0 then
@@ -143,6 +144,7 @@ end
 
 -- Main
 function love.draw()
+  -- Background image
   for i = 0, love.graphics.getWidth() / background:getWidth() do
     for j = 0, love.graphics.getHeight() / background:getHeight() do
       love.graphics.draw(background, i * background:getWidth(),
