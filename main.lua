@@ -70,15 +70,26 @@ function love.update(dt)
     end
   end
   if love.keyboard.isDown(' ') then     -- Pew pew pew
-    pew = { x = origin.x, y = origin.y, heading = heading - math.pi * 1/2}
-  else
-    -- pew = false
+    if pew == false or pew == nil then
+      pew = {
+      x = origin.x,
+      y = origin.y,
+      heading = heading - math.pi * 1/2,
+      ttl = 3
+    }
+    end
   end
 
   -- Player character projectile movement
   if pew then
     pew.x = pew.x + 5 * math.cos(pew.heading)
     pew.y = pew.y + 5 * math.sin(pew.heading)
+
+    if pew.ttl <= 0 then
+      pew = false
+    else
+      pew.ttl = pew.ttl - 0.05
+    end
   end
 
   -- Update inertial heading
@@ -161,10 +172,15 @@ function love.draw()
   -- Display inertial heading
   -- love.graphics.print('Inertial Heading: ' .. inertial_heading, 5, 60)
 
+  -- Display pew ttl
+  -- if pew then
+  --   love.graphics.print('Pew TTL: ' .. pew.ttl, 5, 90)
+  -- end
+
   -- Display PC/projectile collision message
-  if collision then
-    love.graphics.print('Collision', 515, 0)
-  end
+  -- if collision then
+  --   love.graphics.print('Collision', 515, 0)
+  -- end
 
   -- Display pew pew pew
   if pew then
