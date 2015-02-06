@@ -12,7 +12,10 @@ function love.load()
   score = 0
 
   -- Set initial player character origin (center of screen)
-  origin = { x = love.graphics.getWidth() / 2, y = love.graphics.getHeight() / 2 }
+  origin = {
+    x = love.graphics.getWidth() / 2,
+    y = love.graphics.getHeight() / 2
+  }
 
   -- Set initial player character heading (rotational orientation)
   heading = 0
@@ -30,8 +33,11 @@ function love.load()
   movement_max = 8
 
   -- Initial player character polygon
-  pc_vertices = { origin.x + 25, origin.y + 25, origin.x, origin.x - 25,
-                  origin.x - 25, origin.y + 25 }
+  pc_vertices = {
+    origin.x + 25, origin.y + 25,
+    origin.x,      origin.x - 25,
+    origin.x - 25, origin.y + 25
+  }
 
   -- Initial player character polygon shape (physics)
   pc_shape = love.physics.newPolygonShape(pc_vertices[1], pc_vertices[2],
@@ -116,12 +122,12 @@ function love.update(dt)
 
   -- Updated player character polygon
   pc_vertices = {
-                  math.cos(heading) * (origin.x+25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
-                  math.sin(heading) * (origin.x+25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
-                  math.cos(heading) * (origin.x - origin.x) - math.sin(heading) * (origin.y-25 - origin.y) + origin.x,
-                  math.sin(heading) * (origin.x - origin.x) + math.cos(heading) * (origin.y-25 - origin.y) + origin.y,
-                  math.cos(heading) * (origin.x-25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
-                  math.sin(heading) * (origin.x-25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
+    math.cos(heading) * (origin.x+25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
+    math.sin(heading) * (origin.x+25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
+    math.cos(heading) * (origin.x - origin.x) - math.sin(heading) * (origin.y-25 - origin.y) + origin.x,
+    math.sin(heading) * (origin.x - origin.x) + math.cos(heading) * (origin.y-25 - origin.y) + origin.y,
+    math.cos(heading) * (origin.x-25 - origin.x) - math.sin(heading) * (origin.y+25 - origin.y) + origin.x,
+    math.sin(heading) * (origin.x-25 - origin.x) + math.cos(heading) * (origin.y+25 - origin.y) + origin.y,
   }
 
   -- Updated player character polygon shape (physics)
